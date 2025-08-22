@@ -106,18 +106,30 @@ public class SettingServlet extends HttpServlet {
 		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
 				" : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
+		int id = user.getId();
 		String name = user.getName();
 		String account = user.getAccount();
 		String email = user.getEmail();
 
+		// アカウント名重複確認用Userオブジェクト
+		User existAccount = new UserService().select(account);
+
+
 		if(!StringUtils.isEmpty(name) && (20 < name.length())) {
 			errorMessages.add("名前は20文字以下で入力してください");
 		}
+
 		if(StringUtils.isEmpty(account)) {
 			errorMessages.add("アカウント名を入力してください");
 		} else if(20 < account.length()) {
 			errorMessages.add("アカウント名は20文字以下で入力してください");
 		}
+
+		//アカウント重複チェック
+		if(existAccount != null && existAccount.getId() != id) {
+			errorMessages.add("すでに存在するアカウントです");
+		}
+
 		if(!StringUtils.isEmpty(email) && (50 < email.length())) {
 			errorMessages.add("メールアドレスは50文字以下で入力してください");
 		}
