@@ -7,7 +7,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>簡易Twitter</title>
+		<title>つぶやき編集画面</title>
 		<link href="./css/style.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
@@ -45,49 +45,13 @@
 			 </c:if>
 
 			 <div class="form-area">
-				<c:if test="${isShowMessageForm }">
-					<form action="message" method="post">いま、どうしてる？<br />
-						<textarea name="text" cols="100" rows="5" class="tweet-box"></textarea><br />
-						<input type="submit" value="つぶやく">（140文字まで）
-					</form>
-				</c:if>
-			</div>
-
-			<div class="messages">
-				<c:forEach items="${messages}" var="message">
-					<div class="message">
-						<div class="account-name">
-							<span class="account">
-								<a href="./?user_id=<c:out value="${message.userId}"/>">
-									<c:out value="${message.account}"/>
-								</a>
-							</span>
-							<span class="name"><c:out value="${message.name}"/></span>
-						</div>
-						<div class="text">
-							<pre><c:out value="${message.text}"/></pre>
-						</div>						<div class="date">
-							<fmt:formatDate value="${message.createdDate}" pattern="yyyy/MM/dd HH:mm:ss"/>
-						</div>
-
-						<%-- ログインユーザーのつぶやきにのみ表示 --%>
-						<c:if test="${isShowMessageForm && (message.userId == loginUser.id)}">
-
-							<%-- 編集ボタン --%>
-							<form action="edit" method="get">
-								<input name="id" value="${message.id}"  type="hidden"/>
-								<input type="submit" value="編集"/>
-							</form>
-
-							<%-- 削除ボタン --%>
-							<form action="deleteMessage" method="post">
-								<input name="id" value="${message.id}"  type="hidden"/>
-								<input type="submit" value="削除"/>
-							</form>
-
-						</c:if>
-					</div>
-				</c:forEach>
+				<form action="edit" method="post">
+					<textarea name="text" cols="100" rows="5" class="tweet-box">
+						<c:out value="${message.text}"></c:out>
+					</textarea><br />
+					<input name="id" value="${message.id}" type="hidden"/>
+					<input type="submit" value="更新">（140文字まで）
+				</form>
 			</div>
 
 			<div class="copyright">Copyright(c)Issei Sato</div>
