@@ -48,14 +48,14 @@ public class EditServlet extends HttpServlet {
 		String messageId = request.getParameter("id");
 
 		// つぶやき編集画面URLバリデーションチェック（数字以外、入力なし）
-		if(!messageId.matches("^[0-9]*$") || StringUtils.isEmpty(messageId)) {
+		if(StringUtils.isEmpty(messageId) || !messageId.matches("^[0-9]*$")) {
 			errorMessages.add("不正なパラメータが入力されました");
 			session.setAttribute("errorMessages", errorMessages);
 			response.sendRedirect("./");
 			return;
 		}
 
-		Message message =  new MessageService().edit(messageId);
+		Message message =  new MessageService().editSelect(messageId);
 
 		// つぶやき編集画面URLバリデーションチェック（存在しないID）
 		if(message == null) {

@@ -92,7 +92,7 @@ public class MessageService {
 		}
 	}
 
-	public Message edit(String messageId) {
+	public Message editSelect(String messageId) {
 
 		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
 				" : " + new Object(){}.getClass().getEnclosingMethod().getName());
