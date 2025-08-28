@@ -4,7 +4,10 @@ import static chapter6.utils.CloseableUtil.*;
 import static chapter6.utils.DBUtil.*;
 
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,7 +60,7 @@ public class MessageService {
 		}
 	}
 
-	public List<UserMessage> select(String userId) {
+	public List<UserMessage> select(String userId, String start, String end) {
 
 		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
 				" : " + new Object(){}.getClass().getEnclosingMethod().getName());
@@ -68,12 +71,32 @@ public class MessageService {
 		try {
 			connection = getConnection();
 
+			// 絞り込み日時を格納する変数
+			String startDate = null;
+			String endDate = null;
+
+			// 入力があった場合は指定の日時、NULLか空文字ならデフォルト値を格納
+			if(!StringUtils.isEmpty(start)) {
+				startDate = start + " 00:00:00";
+			} else {
+				startDate = "2020-01-01 00:00:00";
+			}
+			if(!StringUtils.isEmpty(end)) {
+				endDate = end + " 23:59:00";
+			} else {
+				// 現在日時取得
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				sdf.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
+				String formattedCurrentDate = sdf.format(new Date());
+				endDate = formattedCurrentDate;
+			}
+
 			Integer id = null;
 			if(!StringUtils.isEmpty(userId)) {
 				id = Integer.parseInt(userId);
 			}
 
-			List<UserMessage> messages = new UserMessageDao().select(connection, id, LIMIT_NUM);
+			List<UserMessage> messages = new UserMessageDao().select(connection, id, startDate, endDate, LIMIT_NUM);
 			commit(connection);
 
 			return messages;

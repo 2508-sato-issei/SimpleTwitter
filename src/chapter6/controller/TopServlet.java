@@ -48,12 +48,16 @@ public class TopServlet extends HttpServlet {
 		}
 
 		String userId = request.getParameter("user_id");
-		List<UserMessage> messages = new MessageService().select(userId);
+		String start = request.getParameter("start");
+		String end = request.getParameter("end");
+		List<UserMessage> messages = new MessageService().select(userId, start, end);
 		List<UserComment> comments = new CommentService().select();
 
 		request.setAttribute("isShowMessageForm", isShowMessageForm);
 		request.setAttribute("messages", messages);
 		request.setAttribute("comments", comments);
+		request.setAttribute("start", start);
+		request.setAttribute("end", end);
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
 	}
 }

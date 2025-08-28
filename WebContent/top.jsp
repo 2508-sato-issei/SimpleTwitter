@@ -44,6 +44,14 @@
 				<c:remove var="errorMessages" scope="session"/>
 			 </c:if>
 
+			<div class="date-form">
+				<form action="./" method="get">日付：
+					<input type="date" name="start" value="${start}">～
+					<input type="date" name="end" value="${end}">
+					<input type="submit" value="絞り込み">
+				</form>
+			</div>
+
 			<div class="form-area">
 				<c:if test="${isShowMessageForm }">
 					<form action="message" method="post">いま、どうしてる？<br />
@@ -78,13 +86,13 @@
 							<%-- 編集ボタン --%>
 							<form action="edit" method="get">
 								<input name="id" value="${message.id}"  type="hidden"/>
-								<input type="submit" value="編集"/>
+								<input type="submit" value="編集">
 							</form>
 
 							<%-- 削除ボタン --%>
 							<form action="deleteMessage" method="post">
 								<input name="id" value="${message.id}"  type="hidden"/>
-								<input type="submit" value="削除"/>
+								<input type="submit" value="削除">
 							</form>
 
 						</c:if>
